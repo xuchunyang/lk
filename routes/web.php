@@ -19,3 +19,7 @@ Route::get('/', function () {
 
 Route::resource('categories', \App\Http\Controllers\CategoryController::class)
     ->only('index', 'show', 'create', 'store', 'edit', 'update', 'destroy');
+
+Route::resource('categories.topics', \App\Http\Controllers\TopicController::class)
+    ->shallow()
+    ->only('show', 'create', 'store', 'edit', 'update', 'destroy');

@@ -1,14 +1,27 @@
 <x-layout title="{{ $category->title }}">
 
     <div class="container mx-auto p-4">
-        @dump($category->toArray())
-
         <figure>
             <img src="{{ $category->logo}}">
             <figcaption>{{ $category->name }}</figcaption>
         </figure>
 
         <a href="{{ route('categories.edit', $category) }}">Edit Category</a>
+
+        <a href="{{ route('categories.topics.create', $category) }}">Create Topic</a>
+
+        <div style="border-top-color: {{ $category->color }}" class="my-4 border-t border-t-4">
+            @foreach($category->topics as $topic)
+                <article class="mb-4 border p-2">
+                    <h1 class="font-medium">{{ $topic->title }}</h1>
+                    <p class="my-2">{{ $topic->content }}</p>
+                    <div class="text-sm text-gray-500">
+                        <span>{{ $topic->views }} views</span>
+                        <a href="{{ route('topics.show', $topic) }}">View more</a>
+                    </div>
+                </article>
+            @endforeach
+        </div>
     </div>
 
 </x-layout>

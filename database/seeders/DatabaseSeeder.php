@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
+use App\Models\Topic;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,13 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        $this->call(CategorySeeder::class);
+        $categories = Category::factory(5)
+            ->has(Topic::factory(20))
+            ->create();
+        $categories->each(function (Category $category) {
+            $category
+                ->addMediaFromUrl('https://picsum.xuchunyang.cn/image/400')
+                ->toMediaCollection();
+        });
     }
 }

@@ -22,6 +22,11 @@ class Category extends Model implements HasMedia
         'description',
     ];
 
+    public function topics(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Topic::class);
+    }
+
     protected function logo(): Attribute
     {
         return Attribute::make(
