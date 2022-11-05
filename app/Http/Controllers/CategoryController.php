@@ -21,6 +21,7 @@ class CategoryController extends Controller
     {
         return view('category.show', [
             'category' => $category,
+            'topics' => $category->topics()->latest()->paginate(),
         ]);
     }
 

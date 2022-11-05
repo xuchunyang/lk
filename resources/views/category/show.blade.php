@@ -11,7 +11,7 @@
         <a href="{{ route('categories.topics.create', $category) }}">Create Topic</a>
 
         <div style="border-top-color: {{ $category->color }}" class="my-4 border-t border-t-4">
-            @foreach($category->topics as $topic)
+            @foreach($topics as $topic)
                 <article class="mb-4 border p-2">
                     <h1 class="font-medium">{{ $topic->title }}</h1>
                     <p class="my-2">{{ $topic->content }}</p>
@@ -21,6 +21,12 @@
                     </div>
                 </article>
             @endforeach
+
+            @if($topics->hasPages())
+                <div class="mt-4">
+                    {{ $topics->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
