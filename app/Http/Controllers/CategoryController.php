@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -27,16 +29,9 @@ class CategoryController extends Controller
         return view('category.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'max:255'],
-            'slug' => ['required', 'max:255', 'unique:categories'],
-            'title' => ['required', 'max:255'],
-            'color' => ['required', 'regex:/#[0-9A-F]{6}/i'],
-            'description' => ['required'],
-            'logo' => ['required', 'image', 'max:200'],
-        ]);
+        $validated = $request->validated();
 
         $logo = $validated['logo'];
         unset($validated['logo']);
@@ -60,16 +55,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'max:255'],
-            'slug' => ['required', 'max:255', Rule::unique('categories')->ignore($category->id)],
-            'title' => ['required', 'max:255'],
-            'color' => ['required', 'regex:/#[0-9A-F]{6}/i'],
-            'description' => ['required'],
-            'logo' => ['image', 'max:200'],
-        ]);
+        $validated = $request->validated();
 
         $logo = null;
         if ($validated['logo'] ?? false) {
