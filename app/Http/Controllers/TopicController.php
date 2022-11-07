@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
@@ -33,7 +34,7 @@ class TopicController extends Controller
      */
     public function store(StoreTopicRequest $request, Category $category)
     {
-        $topic = $category->topics()->create($request->validated());
+        $topic = $category->topics()->create([...$request->validated(), 'author_id' => $request->user()->id]);
 
         return redirect(route('topics.show', $topic))
             ->with('success', '成功新建主题!');

@@ -25,7 +25,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Category $category, Topic $topic)
     {
-        $topic->comments()->create($request->validated());
+        $topic->comments()->create([...$request->validated(), 'author_id' => $request->user()->id]);
 
         return back()->with('success', '成功添加评论!');
     }
