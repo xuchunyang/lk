@@ -8,7 +8,7 @@
         <form action="{{ route('categories.topics.store', $category) }}" method="post">
             @csrf
             <x-form.input name="title" required/>
-            <x-form.input name="content" type="textarea" required/>
+            <x-form.input name="content" type="markdown" required/>
             <x-form.submit/>
         </form>
     </div>

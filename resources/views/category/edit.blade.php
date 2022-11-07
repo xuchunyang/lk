@@ -10,7 +10,7 @@
             <x-form.input name="logo" type="image" help="image/*, 建议比例 1:1, max 200KB"
                           default="{{ $category->logo }}"/>
             <x-form.input name="color" type="color" help="分类主题色" default="{{ $category->color }}"/>
-            <x-form.input name="description" type="textarea" help="分类一句话介绍" required
+            <x-form.input name="description" type="markdown" help="分类一句话介绍" required
                           default="{{ $category->description }}"/>
             <x-form.submit/>
         </form>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\RenderMarkdown;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UploadImage;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,3 +40,6 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate'])->nam
 Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout');
 Route::resource('users', UserController::class)
     ->only('store', 'edit', 'update');
+
+Route::post('/upload/image', UploadImage::class);
+Route::post('/render/markdown', RenderMarkdown::class);
