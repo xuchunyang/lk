@@ -25,7 +25,7 @@
             @foreach($topic->comments as $comment)
                 <li>
                     <article class="prose">
-                        <x-markdown>{!! $comment->content !!}}</x-markdown>
+                        <x-markdown>{!! $comment->content !!}</x-markdown>
                     </article>
                     <a href="{{ route('comments.edit', $comment) }}">Edit</a>
                     <form action="{{ route('comments.destroy', $comment) }}" method="post">
