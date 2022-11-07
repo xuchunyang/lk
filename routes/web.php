@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,10 @@ Route::resource('categories.topics', TopicController::class)
 Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');
+
+Route::get('/users/signup', [UserController::class, 'signup'])->name('users.signup');
+Route::get('/users/signin', [UserController::class, 'signin'])->name('users.signin');
+Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
+Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout');
+Route::resource('users', UserController::class)
+    ->only('store', 'edit', 'update');

@@ -18,6 +18,18 @@
         <ul class="pl-4 list-disc">
             <li><a href="{{ route('categories.index') }}">Index</a></li>
         </ul>
+        @auth
+            <a href="{{ route('users.edit', Auth::user()) }}">
+                {{ Auth::user()->username }}
+            </a>
+            <form action="{{ route('users.signout') }}" method="post">
+                @csrf
+                <button type="submit">Sign out</button>
+            </form>
+        @else
+            <a href="{{ route('users.signup') }}">Sign up</a>
+            <a href="{{ route('users.signin') }}">Sign in</a>
+        @endauth
     </div>
 </header>
 
