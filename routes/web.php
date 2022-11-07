@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +20,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('categories', \App\Http\Controllers\CategoryController::class)
+Route::resource('categories', CategoryController::class)
     ->only('index', 'show', 'create', 'store', 'edit', 'update', 'destroy');
 
-Route::resource('categories.topics', \App\Http\Controllers\TopicController::class)
+Route::resource('categories.topics', TopicController::class)
     ->shallow()
     ->only('show', 'create', 'store', 'edit', 'update', 'destroy');
+
+Route::resource('categories.topics.comments', CommentController::class)
+    ->shallow()
+    ->only('store', 'edit', 'update', 'destroy');
