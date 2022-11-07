@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             'username' => ['required', 'regex:/^[a-z0-9_]+$/ui', Rule::unique('users')->ignore($this->user->id)],
             'email' => ['nullable', 'email'],
             'new-password' => ['nullable', Password::min(4)],
+            'avatar' => ['image', 'max:200', 'dimensions:ratio=1/1'],
         ];
     }
 }

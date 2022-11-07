@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Identicon\Identicon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -20,7 +22,12 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
-        User::create($validated);
+        $user = User::create($validated);
+
+        $user
+            ->addMediaFromBase64((new Identicon())->getImageDataUri($user->username, 180))
+            ->usingFileName(Str::uuid() . '.png')
+            ->toMediaCollection();
 
         return redirect(route('users.signin'))->with('success', '注册成功，请登录!');
     }
@@ -74,6 +81,14 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['new-password']);
         }
         unset($validated['new-password']);
+
+        if ($validated['avatar'] ?? false) {
+            $user->clearMediaCollection();
+            $user
+                ->addMedia($validated['avatar'])
+                ->toMediaCollection();
+            unset($validated['avatar']);
+        }
 
         $user->update($validated);
 
