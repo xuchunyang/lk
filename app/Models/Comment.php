@@ -14,6 +14,11 @@ class Comment extends Model
         'content',
     ];
 
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);

@@ -15,6 +15,7 @@ return new class extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignIdFor(\App\Models\User::class, 'author_id');
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('title');

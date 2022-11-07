@@ -15,6 +15,7 @@ return new class extends Migration {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignIdFor(\App\Models\User::class, 'author_id');
             $table->foreignIdFor(\App\Models\Category::class);
             $table->string('title');
             $table->text('content');
