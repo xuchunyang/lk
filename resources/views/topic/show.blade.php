@@ -21,7 +21,7 @@
         </div>
 
 
-        @auth
+        @can('like')
             <form action="{{ route('topics.like', $topic) }}" method="post">
                 @csrf
                 <button
@@ -29,16 +29,21 @@
                     {{ $topic->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
                 </button>
             </form>
-        @endauth
+        @endcan
 
 
-        <a href="{{ route('topics.edit', $topic) }}">Edit</a>
+        @can('update', $topic)
+            <a href="{{ route('topics.edit', $topic) }}">Edit</a>
+        @endcan
 
-        <form action="{{ route('topics.destroy', $topic) }}" method="post">
-            @csrf
-            @method('DELETE')
-            <input type="submit" value="Delete">
-        </form>
+        @can('delete', $topic)
+            <form action="{{ route('topics.destroy', $topic) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <input type="submit" value="Delete">
+            </form>
+        @endcan
+
 
         <h2 class="my-4 font-bold text-lg">Comments</h2>
         <ul class="pl-4 list-decimal space-y-2">

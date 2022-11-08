@@ -10,7 +10,9 @@
             <a href="{{ route('categories.edit', $category) }}">Edit Category</a>
         @endcan
 
-        <a href="{{ route('categories.topics.create', $category) }}">Create Topic</a>
+        @can('create', \App\Models\Topic::class)
+            <a href="{{ route('categories.topics.create', $category) }}">Create Topic</a>
+        @endcan
 
         <div style="border-top-color: {{ $category->color }}" class="my-4 border-t border-t-4">
             @foreach($topics as $topic)

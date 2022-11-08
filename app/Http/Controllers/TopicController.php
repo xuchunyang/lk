@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Topic::class, 'topic');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

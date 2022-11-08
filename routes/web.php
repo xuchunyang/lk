@@ -26,7 +26,8 @@ Route::get('/', function () {
 Route::resource('categories', CategoryController::class);
 
 Route::post('/topics/{topic}/like', [TopicController::class, 'like'])
-    ->name('topics.like');
+    ->name('topics.like')
+    ->can('like');
 Route::resource('categories.topics', TopicController::class)
     ->shallow()
     ->only('show', 'create', 'store', 'edit', 'update', 'destroy');
