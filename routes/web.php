@@ -42,8 +42,10 @@ Route::get('/users/signup', [UserController::class, 'signup'])->name('users.sign
 Route::get('/users/signin', [UserController::class, 'signin'])->name('users.signin');
 Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
 Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout');
+Route::get('/users/notifications', [UserController::class, 'notifications'])->name('users.notifications');
+Route::post('/users/notifications/{notification}/read', [UserController::class, 'notificationRead'])->name('users.notifications.read');
 Route::resource('users', UserController::class)
-    ->only('store', 'edit', 'update');
+    ->only('store', 'edit', 'update', 'show');
 
 Route::post('/upload/image', UploadImage::class);
 Route::post('/render/markdown', RenderMarkdown::class);

@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Identicon\Identicon;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -93,5 +95,32 @@ class UserController extends Controller
         $user->update($validated);
 
         return back()->with('success', '成功更新用户信息!');
+    }
+
+    public function notifications()
+    {
+        return view('user.notifications');
+    }
+
+    public function notificationRead(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => ['required', 'exists:notifications'],
+        ]);
+        $databaseNotification = $request->user()->notifications()->find($validated['id']);
+        if ($databaseNotification->read_at) {
+            $databaseNotification->markAsUnread();
+        } else {
+            $databaseNotification->markAsRead();
+        }
+
+        return back()->with('success', '成功标记通知!');
+    }
+
+    public function show(User $user)
+    {
+        return view('user.show', [
+            'user' => $user,
+        ]);
     }
 }

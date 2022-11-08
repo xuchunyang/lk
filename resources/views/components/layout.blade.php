@@ -23,6 +23,10 @@
             <a href="{{ route('users.edit', Auth::user()) }}">
                 {{ Auth::user()->username }}
             </a>
+            <a href="{{ route('users.notifications') }}">
+                {{ Auth::user()->unreadNotifications->count() }}
+                notifications
+            </a>
             <form action="{{ route('users.signout') }}" method="post">
                 @csrf
                 <button type="submit">Sign out</button>

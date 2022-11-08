@@ -7,12 +7,15 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Topic;
+use App\Notifications\Liked;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -76,10 +79,17 @@ class CommentController extends Controller
         $like = $comment->likes()->where('lover_id', $request->user()->id)->first();
         if ($like) {
             $like->delete();
+            $success = 'Unliked';
+            // 取消喜爱时，删除提醒
+            DatabaseNotification::where('data', json_encode(['like_id' => $like->id]))->first()->delete();
         } else {
-            $comment->likes()->create(['lover_id' => $request->user()->id]);
+            $like = $comment->likes()->create(['lover_id' => $request->user()->id]);
+            if (!$request->user()->is($comment->author)) {
+                $comment->author->notify(new Liked($like));
+            }
+            $success = 'Liked';
         }
 
-        return back()->with('success', $like ? 'Unliked' : 'Liked');
+        return back()->with('success', $success);
     }
 }

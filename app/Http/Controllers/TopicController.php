@@ -6,11 +6,13 @@ use App\Http\Requests\StoreTopicRequest;
 use App\Http\Requests\UpdateTopicRequest;
 use App\Models\Category;
 use App\Models\Topic;
+use App\Notifications\Liked;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
@@ -102,10 +104,17 @@ class TopicController extends Controller
         $like = $topic->likes()->where('lover_id', $request->user()->id)->first();
         if ($like) {
             $like->delete();
+            $success = 'Unliked';
+            // 取消喜爱时，删除提醒
+            DatabaseNotification::where('data', json_encode(['like_id' => $like->id]))->first()->delete();
         } else {
-            $topic->likes()->create(['lover_id' => $request->user()->id]);
+            $like = $topic->likes()->create(['lover_id' => $request->user()->id]);
+            if (!$request->user()->is($topic->author)) {
+                $topic->author->notify(new Liked($like));
+            }
+            $success = 'Liked';
         }
 
-        return back()->with('success', $like ? 'Unliked' : 'Liked');
+        return back()->with('success', $success);
     }
 }
