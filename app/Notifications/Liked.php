@@ -53,10 +53,10 @@ class Liked extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
-        return [
-            'like_id' => $this->like->id,
-        ];
+        return Like::with('lover', 'likeable')
+            ->find($this->like->id)
+            ->toArray();
     }
 }

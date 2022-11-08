@@ -7,19 +7,25 @@
             @foreach(Auth::user()->notifications as $notification)
                 @if($notification->type === \App\Notifications\Liked::class)
                     @php
-                        $like = \App\Models\Like::find($notification->data['like_id']);
+                        $like = $notification->data;
                     @endphp
                     <li>
-                        <a href="{{ route('users.show', $like->lover) }}">
-                            {{ $like->lover->username }}
+                        <a href="{{ route('users.show', $like['lover']['id']) }}">
+                            {{ $like['lover']['username'] }}
                         </a>
-                        @if($like->likeable_type === \App\Models\Topic::class)
+                        @if($like['likeable_type'] === \App\Models\Topic::class)
+                            @php
+                                $topic = $like['likeable'];
+                            @endphp
                             赞了你的话题
-                            <a href="{{ route('topics.show', $like->likeable) }}">{{ $like->likeable->title }}</a>
+                            <a href="{{ route('topics.show', $topic['id']) }}">{{ $topic['title'] }}</a>
                         @else
+                            @php
+                                $comment = $like['likeable'];
+                            @endphp
                             赞了你的评论
                             {{-- FIXME 如果评论分页了，怎么办？ 方法一：那就不分页了 --}}
-                            <a href="{{ route('topics.show', $like->likeable->topic) }}#comment-{{$like->likeable->id}}">{{ Str::limit($like->likeable->content, 50) }}</a>
+                            <a href="{{ route('topics.show', $comment['topic_id']) }}#comment-{{$comment['id']}}">{{ Str::limit($comment['content'], 50) }}</a>
                         @endif
 
                         <form action="{{ route('users.notifications.read', $notification) }}" method="post">

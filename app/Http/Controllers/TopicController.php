@@ -105,8 +105,6 @@ class TopicController extends Controller
         if ($like) {
             $like->delete();
             $success = 'Unliked';
-            // 取消喜爱时，删除提醒
-            DatabaseNotification::where('data', json_encode(['like_id' => $like->id]))->first()->delete();
         } else {
             $like = $topic->likes()->create(['lover_id' => $request->user()->id]);
             if (!$request->user()->is($topic->author)) {
