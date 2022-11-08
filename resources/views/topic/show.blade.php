@@ -21,13 +21,16 @@
         </div>
 
 
-        <form action="{{ route('topics.like', $topic) }}" method="post">
-            @csrf
-            <button
-                type="submit">
-                {{ $topic->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
-            </button>
-        </form>
+        @auth
+            <form action="{{ route('topics.like', $topic) }}" method="post">
+                @csrf
+                <button
+                    type="submit">
+                    {{ $topic->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
+                </button>
+            </form>
+        @endauth
+
 
         <a href="{{ route('topics.edit', $topic) }}">Edit</a>
 
@@ -40,7 +43,7 @@
         <h2 class="my-4 font-bold text-lg">Comments</h2>
         <ul class="pl-4 list-decimal space-y-2">
             @foreach($topic->comments as $comment)
-                <li>
+                <li id="comment-{{ $comment->id }}">
                     <article class="prose">
                         <x-markdown>{!! $comment->content !!}</x-markdown>
                     </article>
@@ -51,13 +54,15 @@
                         <button type="submit">Delete</button>
                     </form>
                     <span>{{ $comment->likes()->count() }} likes</span>
-                    <form action="{{ route('comments.like', $comment) }}" method="post">
-                        @csrf
-                        <button
-                            type="submit">
-                            {{ $comment->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
-                        </button>
-                    </form>
+                    @auth
+                        <form action="{{ route('comments.like', $comment) }}" method="post">
+                            @csrf
+                            <button
+                                type="submit">
+                                {{ $comment->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
+                            </button>
+                        </form>
+                    @endauth
                 </li>
             @endforeach
         </ul>
