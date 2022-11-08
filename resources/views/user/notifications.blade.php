@@ -3,7 +3,7 @@
     <div class="container mx-auto p-4">
         <h1 class="mb-4 font-bold text-lg">Notifications</h1>
 
-        <ul>
+        <ul class="space-y-4">
             @foreach(Auth::user()->notifications as $notification)
                 @if($notification->type === \App\Notifications\Liked::class)
                     @php
@@ -37,6 +37,18 @@
                             @endphp
                             <button type="submit">{{ $note->read_at ? 'Unread' : 'Read' }}</button>
                         </form>
+                    </li>
+                @elseif($notification->type === \App\Notifications\Replied::class)
+                    @php
+                        $comment = $notification->data;
+                    @endphp
+                    <li>
+                        <a href="{{ route('users.show', $comment['author']['id']) }}">
+                            {{ $comment['author']['username'] }}
+                        </a>
+                        评论了你的主题
+                        {{ $comment['topic']['title'] }}
+                        <a href="{{ route('topics.show', $comment['topic_id']) }}#comment-{{$comment['id']}}">{{ Str::limit($comment['content'], 50) }}</a>
                     </li>
                 @endif
             @endforeach

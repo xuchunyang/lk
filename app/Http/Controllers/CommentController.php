@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Topic;
 use App\Notifications\Liked;
+use App\Notifications\Replied;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -29,7 +30,11 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Category $category, Topic $topic)
     {
-        $topic->comments()->create([...$request->validated(), 'author_id' => $request->user()->id]);
+        $comment = $topic->comments()->create([...$request->validated(), 'author_id' => $request->user()->id]);
+
+        if (!$request->user()->is($topic->author)) {
+            $topic->author->notify(new Replied($comment));
+        }
 
         return back()->with('success', '成功添加评论!');
     }
