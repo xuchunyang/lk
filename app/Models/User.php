@@ -64,6 +64,13 @@ class User extends Authenticatable implements HasMedia
         );
     }
 
+    protected function isAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, $attributes) => $attributes['username'] === 'admin',
+        );
+    }
+
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'author_id');

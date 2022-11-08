@@ -23,8 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('categories', CategoryController::class)
-    ->only('index', 'show', 'create', 'store', 'edit', 'update', 'destroy');
+Route::resource('categories', CategoryController::class);
 
 Route::post('/topics/{topic}/like', [TopicController::class, 'like'])
     ->name('topics.like');

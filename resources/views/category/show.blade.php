@@ -6,7 +6,9 @@
             <figcaption>{{ $category->name }}</figcaption>
         </figure>
 
-        <a href="{{ route('categories.edit', $category) }}">Edit Category</a>
+        @can('update', $category)
+            <a href="{{ route('categories.edit', $category) }}">Edit Category</a>
+        @endcan
 
         <a href="{{ route('categories.topics.create', $category) }}">Create Topic</a>
 

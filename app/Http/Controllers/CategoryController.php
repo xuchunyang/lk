@@ -11,10 +11,15 @@ use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }
+
     public function index()
     {
         return view('category.index', [
-            'categories' => Category::all(),
+            'categories' => Category::query()->with('author')->get(),
         ]);
     }
 
