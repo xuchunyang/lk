@@ -63,6 +63,11 @@
                             </button>
                         </form>
                     @endauth
+                    <form action="{{ route('comments.reply', $comment) }}" method="post">
+                        @csrf
+                        <x-form.input type="markdown" name="content" required/>
+                        <x-form.submit/>
+                    </form>
                 </li>
             @endforeach
         </ul>

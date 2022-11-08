@@ -95,4 +95,20 @@ class CommentController extends Controller
 
         return back()->with('success', $success);
     }
+
+    public function reply(StoreCommentRequest $request, Comment $comment)
+    {
+        $topic = $comment->topic;
+        $newComment = $topic->comments()->create([
+            ...$request->validated(),
+            'author_id' => $request->user()->id,
+            'parent_id' => $comment->id,
+        ]);
+
+        if (!$request->user()->is($comment->author)) {
+            $comment->author->notify(new Replied($newComment));
+        }
+
+        return back()->with('success', '成功添加评论!');
+    }
 }

@@ -34,6 +34,8 @@ Route::resource('categories.topics', TopicController::class)
 
 Route::post('/comments/{comment}/like', [CommentController::class, 'like'])
     ->name('comments.like');
+Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])
+    ->name('comments.reply');
 Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');

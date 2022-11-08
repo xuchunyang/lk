@@ -5,11 +5,11 @@
 
         <ul class="space-y-4">
             @foreach(Auth::user()->notifications as $notification)
-                @if($notification->type === \App\Notifications\Liked::class)
-                    @php
-                        $like = $notification->data;
-                    @endphp
-                    <li>
+                <li>
+                    @if($notification->type === \App\Notifications\Liked::class)
+                        @php
+                            $like = $notification->data;
+                        @endphp
                         <a href="{{ route('users.show', $like['lover']['id']) }}">
                             {{ $like['lover']['username'] }}
                         </a>
@@ -27,30 +27,34 @@
                             {{-- FIXME 如果评论分页了，怎么办？ 方法一：那就不分页了 --}}
                             <a href="{{ route('topics.show', $comment['topic_id']) }}#comment-{{$comment['id']}}">{{ Str::limit($comment['content'], 50) }}</a>
                         @endif
-
-                        <form action="{{ route('users.notifications.read', $notification) }}" method="post">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $notification->id }}">
-                            @php
-                                /** @var \Illuminate\Notifications\DatabaseNotification $note */
-                                $note = $notification;
-                            @endphp
-                            <button type="submit">{{ $note->read_at ? 'Unread' : 'Read' }}</button>
-                        </form>
-                    </li>
-                @elseif($notification->type === \App\Notifications\Replied::class)
-                    @php
-                        $comment = $notification->data;
-                    @endphp
-                    <li>
+                    @elseif($notification->type === \App\Notifications\Replied::class)
+                        @php
+                            $comment = $notification->data;
+                        @endphp
                         <a href="{{ route('users.show', $comment['author']['id']) }}">
                             {{ $comment['author']['username'] }}
                         </a>
-                        评论了你的主题
-                        {{ $comment['topic']['title'] }}
+                        @if($comment['parent'] !== null)
+                            回复了你的评论
+                            {{ Str::limit($comment['parent']['content'], 50) }}
+                        @else
+                            评论了你的主题
+                            {{ $comment['topic']['title'] }}
+                        @endif
                         <a href="{{ route('topics.show', $comment['topic_id']) }}#comment-{{$comment['id']}}">{{ Str::limit($comment['content'], 50) }}</a>
-                    </li>
-                @endif
+                    @endif
+
+                    <form action="{{ route('users.notifications.read', $notification) }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $notification->id }}">
+                        @php
+                            /** @var \Illuminate\Notifications\DatabaseNotification $note */
+                            $note = $notification;
+                        @endphp
+                        <button type="submit">{{ $note->read_at ? 'Unread' : 'Read' }}</button>
+                    </form>
+
+                </li>
             @endforeach
         </ul>
     </div>

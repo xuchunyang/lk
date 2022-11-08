@@ -56,7 +56,7 @@ class Replied extends Notification
     public function toArray($notifiable)
     {
         return Comment::query()
-            ->with('author', 'topic')
+            ->with(['author', 'topic', 'parent'])
             ->find($this->comment->id)
             ->toArray();
     }
