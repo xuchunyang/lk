@@ -10,7 +10,24 @@
         <article class="prose">
             <x-markdown>{!! $topic->content !!}</x-markdown>
         </article>
-        <span>{{ $topic->views }} views</span>
+
+        <div class="my-4">
+            <h2 class="mt-4">Liked by:</h2>
+            <ul>
+                @foreach($topic->likes()->with('lover')->get() as $like)
+                    <li>{{ $like->lover->username }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+
+        <form action="{{ route('topics.like', $topic) }}" method="post">
+            @csrf
+            <button
+                type="submit">
+                {{ $topic->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
+            </button>
+        </form>
 
         <a href="{{ route('topics.edit', $topic) }}">Edit</a>
 
@@ -32,6 +49,14 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit">Delete</button>
+                    </form>
+                    <span>{{ $comment->likes()->count() }} likes</span>
+                    <form action="{{ route('comments.like', $comment) }}" method="post">
+                        @csrf
+                        <button
+                            type="submit">
+                            {{ $comment->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
+                        </button>
                     </form>
                 </li>
             @endforeach

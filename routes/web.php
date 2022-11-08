@@ -26,10 +26,14 @@ Route::get('/', function () {
 Route::resource('categories', CategoryController::class)
     ->only('index', 'show', 'create', 'store', 'edit', 'update', 'destroy');
 
+Route::post('/topics/{topic}/like', [TopicController::class, 'like'])
+    ->name('topics.like');
 Route::resource('categories.topics', TopicController::class)
     ->shallow()
     ->only('show', 'create', 'store', 'edit', 'update', 'destroy');
 
+Route::post('/comments/{comment}/like', [CommentController::class, 'like'])
+    ->name('comments.like');
 Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');

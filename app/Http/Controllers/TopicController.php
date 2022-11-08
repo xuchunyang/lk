@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
@@ -94,5 +95,17 @@ class TopicController extends Controller
 
         return redirect(route('categories.show', $topic->category))
             ->with('success', '成功删除主题!');
+    }
+
+    public function like(Request $request, Topic $topic)
+    {
+        $like = $topic->likes()->where('lover_id', $request->user()->id)->first();
+        if ($like) {
+            $like->delete();
+        } else {
+            $topic->likes()->create(['lover_id' => $request->user()->id]);
+        }
+
+        return back()->with('success', $like ? 'Unliked' : 'Liked');
     }
 }

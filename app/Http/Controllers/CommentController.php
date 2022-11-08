@@ -11,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CommentController extends Controller
@@ -68,5 +69,17 @@ class CommentController extends Controller
         $comment->delete();
 
         return back()->with('success', '成功删除评论!');
+    }
+
+    public function like(Request $request, Comment $comment)
+    {
+        $like = $comment->likes()->where('lover_id', $request->user()->id)->first();
+        if ($like) {
+            $like->delete();
+        } else {
+            $comment->likes()->create(['lover_id' => $request->user()->id]);
+        }
+
+        return back()->with('success', $like ? 'Unliked' : 'Liked');
     }
 }

@@ -78,4 +78,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Comment::class, 'author_id');
     }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class, 'lover_id');
+    }
 }
