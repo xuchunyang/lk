@@ -42,12 +42,13 @@ Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');
 
-Route::get('/users/signup', [UserController::class, 'signup'])->name('users.signup');
-Route::get('/users/signin', [UserController::class, 'signin'])->name('users.signin');
-Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
-Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout');
-Route::get('/users/notifications', [UserController::class, 'notifications'])->name('users.notifications');
-Route::post('/users/notifications/{notification}/read', [UserController::class, 'notificationRead'])->name('users.notifications.read');
+Route::get('/users/signup', [UserController::class, 'signup'])->name('users.signup')->middleware('guest');
+Route::get('/users/signin', [UserController::class, 'signin'])->name('users.signin')->middleware('guest');
+Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate')->middleware('guest');
+Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout')->middleware('auth');
+Route::get('/users/notifications', [UserController::class, 'notifications'])->name('users.notifications')->middleware('auth');
+Route::post('/users/notifications/{databaseNotification}/read', [UserController::class, 'notificationRead'])->name('users.notifications.read')
+    ->can('readNotification', [\App\Models\User::class, 'databaseNotification']);
 Route::resource('users', UserController::class)
     ->only('store', 'edit', 'update', 'show');
 

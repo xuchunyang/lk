@@ -15,6 +15,11 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
+
     public function signup()
     {
         return view('user.signup');
@@ -102,12 +107,8 @@ class UserController extends Controller
         return view('user.notifications');
     }
 
-    public function notificationRead(Request $request)
+    public function notificationRead(Request $request, DatabaseNotification $databaseNotification)
     {
-        $validated = $request->validate([
-            'id' => ['required', 'exists:notifications'],
-        ]);
-        $databaseNotification = $request->user()->notifications()->find($validated['id']);
         if ($databaseNotification->read_at) {
             $databaseNotification->markAsUnread();
         } else {
