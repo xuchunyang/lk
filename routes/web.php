@@ -33,9 +33,11 @@ Route::resource('categories.topics', TopicController::class)
     ->only('show', 'create', 'store', 'edit', 'update', 'destroy');
 
 Route::post('/comments/{comment}/like', [CommentController::class, 'like'])
-    ->name('comments.like');
+    ->name('comments.like')
+    ->can('like');
 Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])
-    ->name('comments.reply');
+    ->name('comments.reply')
+    ->can('create', \App\Models\Comment::class);
 Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');
@@ -49,5 +51,7 @@ Route::post('/users/notifications/{notification}/read', [UserController::class, 
 Route::resource('users', UserController::class)
     ->only('store', 'edit', 'update', 'show');
 
-Route::post('/upload/image', UploadImage::class);
-Route::post('/render/markdown', RenderMarkdown::class);
+Route::post('/upload/image', UploadImage::class)
+    ->middleware('auth');
+Route::post('/render/markdown', RenderMarkdown::class)
+    ->middleware('auth');

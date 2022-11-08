@@ -52,14 +52,19 @@
                     <article class="prose">
                         <x-markdown>{!! $comment->content !!}</x-markdown>
                     </article>
-                    <a href="{{ route('comments.edit', $comment) }}">Edit</a>
-                    <form action="{{ route('comments.destroy', $comment) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Delete</button>
-                    </form>
+                    @can('update', $comment)
+                        <a href="{{ route('comments.edit', $comment) }}">Edit</a>
+                    @endcan
+                    @can('delete', $comment)
+                        <form action="{{ route('comments.destroy', $comment) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
+                    @endcan
                     <span>{{ $comment->likes()->count() }} likes</span>
-                    @auth
+
+                    @can('like')
                         <form action="{{ route('comments.like', $comment) }}" method="post">
                             @csrf
                             <button
@@ -67,22 +72,27 @@
                                 {{ $comment->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
                             </button>
                         </form>
-                    @endauth
-                    <form action="{{ route('comments.reply', $comment) }}" method="post">
-                        @csrf
-                        <x-form.input type="markdown" name="content" required/>
-                        <x-form.submit/>
-                    </form>
+                    @endcan
+
+                    @can('create', \App\Models\Comment::class)
+                        <form action="{{ route('comments.reply', $comment) }}" method="post">
+                            @csrf
+                            <x-form.input type="markdown" name="content" required/>
+                            <x-form.submit/>
+                        </form>
+                    @endcan
                 </li>
             @endforeach
         </ul>
 
-        <h2 class="py-4 font-bold text-lg">Add comment</h2>
-        <form action="{{ route('categories.topics.comments.store', [$topic->category, $topic]) }}" method="post">
-            @csrf
-            <x-form.input type="markdown" name="content" required/>
-            <x-form.submit/>
-        </form>
+        @can('create', \App\Models\Comment::class)
+            <h2 class="py-4 font-bold text-lg">Add comment</h2>
+            <form action="{{ route('categories.topics.comments.store', [$topic->category, $topic]) }}" method="post">
+                @csrf
+                <x-form.input type="markdown" name="content" required/>
+                <x-form.submit/>
+            </form>
+        @endcan
 
     </div>
 </x-layout>
