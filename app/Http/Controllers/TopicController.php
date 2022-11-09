@@ -59,7 +59,13 @@ class TopicController extends Controller
     {
         Model::withoutTimestamps(fn() => $topic->query()->increment('views'));
         return view('topic.show', [
-            'topic' => Topic::with('likes.lover')->find($topic->id),
+            'topic' => Topic::with([
+                'likes.lover',
+                'comments' => [
+                    'author',
+                    'likes',
+                ],
+            ])->find($topic->id),
         ]);
     }
 

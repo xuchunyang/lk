@@ -40,7 +40,7 @@
                         @endcan
                     </div>
 
-                    <x-markdown-rendered-with-prose :markdown="$topic->content"/>
+                    <x-markdown-rendered-with-prose :markdown="$topic->content" class="text-[15px] leading-normal"/>
                 </div>
 
                 <div class="mt-4 bg-white rounded shadow p-4 lg:p-8">
@@ -74,10 +74,10 @@
                                 action="{{ route('topics.like', $topic) }}" method="post">
                                 @csrf
                                 @php
-                                    $liked = $topic->likes()->where('lover_id', Auth::user()->id)->exists();
+                                    $liked = $topic->likes->where('lover_id', Auth::user()->id)->first();
                                 @endphp
                                 <button
-                                    title="{{ $liked ? '你已喜欢，点击取消喜欢' : '喜欢' }}"
+                                    title="{{ $liked ? '你已喜爱，点击取消喜爱' : '喜爱' }}"
                                     class="block"
                                     type="submit">
                                     @if($liked)
@@ -89,7 +89,7 @@
                             </form>
                         @endcan
 
-                        <p class="mr-2">{{ $topic->likes->count() }} 人喜欢</p>
+                        <p class="mr-2">{{ $topic->likes->count() }} 人喜爱</p>
 
                         @foreach($topic->likes as $like)
                             <a
@@ -102,57 +102,79 @@
                     </div>
                 </div>
 
-                <div class="mt-4 bg-white rounded shadow p-4 lg:p-8">
-                    <h2 class="my-4 font-bold text-lg">Comments</h2>
-                    <ul class="pl-4 list-decimal space-y-2">
-                        @foreach($topic->comments as $comment)
-                            <li id="comment-{{ $comment->id }}">
-                                <article class="prose">
-                                    <x-markdown>{!! $comment->content !!}</x-markdown>
-                                </article>
-                                @can('update', $comment)
-                                    <a href="{{ route('comments.edit', $comment) }}">Edit</a>
-                                @endcan
-                                @can('delete', $comment)
-                                    <form action="{{ route('comments.destroy', $comment) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit">Delete</button>
-                                    </form>
-                                @endcan
-                                <span>{{ $comment->likes()->count() }} likes</span>
+                <div
+                    class="my-8 flex justify-center relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-px before:bg-black/10">
+                    <div class="flex items-center px-2 relative z-10 text-gray-600 bg-[#f0f2f5]">
+                        <x-heroicon-s-chat-bubble-left-right class="w-4 h-4 mr-1"/>
+                        <span class="text-sm">讨论数量：{{ $topic->comments->count() }}</span>
+                    </div>
+                </div>
 
-                                @can('like')
-                                    <form action="{{ route('comments.like', $comment) }}" method="post">
-                                        @csrf
-                                        <button
-                                            type="submit">
-                                            {{ $comment->likes()->where('lover_id', Auth::user()->id)->exists() ? 'Unlike' : 'Like' }}
-                                        </button>
-                                    </form>
-                                @endcan
+                <div
+                    class="relative before:absolute before:w-px before:h-full before:bg-black/25 before:left-4 sm:before:left-[80px]">
+                    @foreach($topic->comments as $comment)
+                        <div class="flex mt-6 relative z-10">
+                            <a
+                                class="hidden sm:block sm:mr-4"
+                                href="{{ route('users.show', $comment->author) }}">
+                                <img
+                                    class="w-[50px] h-[50px] rounded shadow shadow-black/30 border border-white"
+                                    src="{{ $comment->author->avatar }}"
+                                    alt="{{ $comment->author->username }}'s avatar">
+                            </a>
+                            <div class="flex-1 bg-white rounded shadow-lg border border-blue-400/10">
+                                <div
+                                    class="px-4 py-2 sm:relative sm:before:absolute sm:before:top-1/2 sm:before:-left-px sm:before:-translate-x-full sm:before:-translate-y-1/2  sm:before:border-solid sm:before:border-t-[8px] sm:before:border-r-[8px] sm:before:border-b-[8px] sm:before:border-l-0 sm:before:border-transparent sm:before:border-r-[color:#d4dade]">
+                                    <a
+                                        class="text-sm font-bold"
+                                        href="{{ route('users.show', $comment->author) }}">
+                                        {{ $comment->author->username }}
+                                    </a>
+                                </div>
+                                <div class="px-4 border-t">
+                                    <x-markdown-rendered-with-prose :markdown="$comment->content" class="prose-sm"/>
+                                    <div class="mb-4 text-gray-600 text-xs flex items-center space-x-1">
+                                        <x-heroicon-o-clock class="w-3 h-3"/>
+                                        <time
+                                            datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}</time>
+                                    </div>
+                                </div>
+                                <div class="px-4 py-2 border-t">
+                                    @can('like')
+                                        <form action="{{ route('comments.like', $comment) }}" method="post">
+                                            @csrf
+                                            @php
+                                                $liked = $comment->likes->where('lover_id', Auth::user()->id)->first();
+                                            @endphp
+                                            <button
+                                                title="{{ $liked ? '你已喜爱，点击取消喜爱' : '喜爱' }}"
+                                                class="block"
+                                                type="submit">
+                                                @if($liked)
+                                                    <x-heroicon-s-heart class="w-6 h-6 text-pink-600"/>
+                                                @else
+                                                    <x-heroicon-o-heart class="w-6 h-6 text-pink-600"/>
+                                                @endif
+                                            </button>
+                                        </form>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
 
-                                @can('create', \App\Models\Comment::class)
-                                    <form action="{{ route('comments.reply', $comment) }}" method="post">
-                                        @csrf
-                                        <x-form.input type="markdown" name="content" required/>
-                                        <x-form.submit/>
-                                    </form>
-                                @endcan
-                            </li>
-                        @endforeach
-                    </ul>
 
-                    @can('create', \App\Models\Comment::class)
-                        <h2 class="py-4 font-bold text-lg">Add comment</h2>
+                @can('create', \App\Models\Comment::class)
+                    <div class="mt-6 bg-white rounded shadow p-4 lg:p-8 sm:ml-[calc(50px+1rem)]">
                         <form action="{{ route('categories.topics.comments.store', [$topic->category, $topic]) }}"
                               method="post">
                             @csrf
                             <x-form.input type="markdown" name="content" required/>
                             <x-form.submit/>
                         </form>
-                    @endcan
-                </div>
+                    </div>
+                @endcan
             </div>
 
             <div class="hidden lg:block lg:w-3/12">
