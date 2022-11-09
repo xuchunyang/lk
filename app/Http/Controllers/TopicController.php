@@ -10,6 +10,7 @@ use App\Notifications\Liked;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
@@ -56,9 +57,9 @@ class TopicController extends Controller
      */
     public function show(Topic $topic)
     {
-        $topic->query()->increment('views');
+        Model::withoutTimestamps(fn() => $topic->query()->increment('views'));
         return view('topic.show', [
-            'topic' => $topic,
+            'topic' => Topic::with('likes.lover')->find($topic->id),
         ]);
     }
 
