@@ -35,7 +35,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Category $category, Topic $topic)
     {
-        $comment = $topic->comments()->create([...$request->validated(), 'author_id' => $request->user()->id]);
+        $comment = $topic->comments()->create(array_merge($request->validated(), ['author_id' => $request->user()->id]));
 
         if (!$request->user()->is($topic->author)) {
             $topic->author->notify(new Replied($comment));
@@ -104,11 +104,12 @@ class CommentController extends Controller
     public function reply(StoreCommentRequest $request, Comment $comment)
     {
         $topic = $comment->topic;
-        $newComment = $topic->comments()->create([
-            ...$request->validated(),
-            'author_id' => $request->user()->id,
-            'parent_id' => $comment->id,
-        ]);
+        $newComment = $topic->comments()->create(array_merge(
+            $request->validated(),
+            [
+                'author_id' => $request->user()->id,
+                'parent_id' => $comment->id,
+            ]));
 
         if (!$request->user()->is($comment->author)) {
             $comment->author->notify(new Replied($newComment));

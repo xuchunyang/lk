@@ -43,7 +43,7 @@ class TopicController extends Controller
      */
     public function store(StoreTopicRequest $request, Category $category)
     {
-        $topic = $category->topics()->create([...$request->validated(), 'author_id' => $request->user()->id]);
+        $topic = $category->topics()->create(array_merge($request->validated(), ['author_id' => $request->user()->id]));
 
         return redirect(route('topics.show', $topic))
             ->with('success', '成功新建主题!');
