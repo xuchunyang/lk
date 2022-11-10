@@ -54,7 +54,7 @@ class TopicPolicy
      */
     public function update(User $user, Topic $topic)
     {
-        return $user->id === $topic->author->id;
+        return $user->id == $topic->author->id;
     }
 
     /**

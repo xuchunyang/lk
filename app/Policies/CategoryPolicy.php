@@ -54,7 +54,7 @@ class CategoryPolicy
      */
     public function update(User $user, Category $category): bool
     {
-        return $user->id === $category->author_id;
+        return $user->id == $category->author_id;
     }
 
     /**

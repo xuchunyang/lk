@@ -54,7 +54,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): Response|bool
     {
-        return $user->id === $comment->author_id;
+        return $user->id == $comment->author_id;
     }
 
     /**
@@ -66,7 +66,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): Response|bool
     {
-        return $user->id === $comment->author_id &&
+        return $user->id == $comment->author_id &&
             !Comment::where('parent_id', $comment->id)->exists();
     }
 }

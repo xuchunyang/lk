@@ -54,7 +54,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): Response|bool
     {
-        return $user->id === $model->id;
+        return $user->id == $model->id;
     }
 
     /**
@@ -71,6 +71,6 @@ class UserPolicy
 
     public function readNotification(User $user, DatabaseNotification $databaseNotification): bool
     {
-        return $user->id === $databaseNotification->notifiable_id;
+        return $user->id == $databaseNotification->notifiable_id;
     }
 }
