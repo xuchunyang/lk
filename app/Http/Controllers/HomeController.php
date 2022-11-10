@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class HomeController extends Controller
 {
@@ -18,7 +18,13 @@ class HomeController extends Controller
     {
         return view('home', [
             'categories' => Category::query()->get(),
-            'topics' => Topic::with(['author', 'category', 'likes'])->latest()->paginate(),
+            'topics' => Topic::with(['author', 'category', 'likes'])
+                ->when($request->query('search'), function (Builder $builder, string $search) {
+                    $builder->where('title', 'like', "%$search%");
+                })
+                ->latest()
+                ->paginate()
+                ->withQueryString(),
         ]);
     }
 }

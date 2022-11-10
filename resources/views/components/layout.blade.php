@@ -31,10 +31,20 @@
                     </a>
                 @endif
                 <a href="/"
-                   class="p-3 flex items-center space-x-2 hover:bg-gray-100">
+                   class="mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
                     <x-heroicon-o-home class="w-6 h-6"/>
                     <span>Home</span>
                 </a>
+                <form
+                    action="{{ route('home') }}"
+                    method="get"
+                    class="flex items-center">
+                    <label class="sr-only" for="search">Search</label>
+                    <input class="rounded-full text-sm px-4 py-1.5 opacity-80 focus:opacity-100" type="search"
+                           id="search" name="search" placeholder="搜索帖子"
+                           value="{{ request()->query('search') }}"
+                    >
+                </form>
                 @auth
                     <a href="{{ route('users.notifications') }}"
                        class="ml-auto mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
