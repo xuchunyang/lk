@@ -57,7 +57,8 @@
                 <div x-show="preview" class="border px-3 py-2 min-h-[202px]">
                     <div x-show="html === null">Loading...</div>
                     <div x-show="html !== null">
-                        <article x-html="html" class="prose"></article>
+                        <article x-html="html"
+                                 class="prose max-w-none prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-h4:text-base prose-h5:text-sm prose-blockquote:bg-[#f5f8fc] prose-blockquote:py-1 prose-blockquote:not-italic prose-sky prose-a:no-underline prose-img:rounded prose-img:border prose-img:shadow-lg"></article>
                     </div>
                 </div>
             </div>
