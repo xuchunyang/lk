@@ -49,6 +49,8 @@ Route::post('/users/signout', [UserController::class, 'signout'])->name('users.s
 Route::get('/users/notifications', [UserController::class, 'notifications'])->name('users.notifications')->middleware('auth');
 Route::post('/users/notifications/{databaseNotification}/read', [UserController::class, 'notificationRead'])->name('users.notifications.read')
     ->can('readNotification', [\App\Models\User::class, 'databaseNotification']);
+Route::post('/users/notifications/read_all', [UserController::class, 'notificationReadAll'])->name('users.notifications.read-all')
+    ->middleware('auth');
 Route::resource('users', UserController::class)
     ->only('store', 'edit', 'update', 'show');
 

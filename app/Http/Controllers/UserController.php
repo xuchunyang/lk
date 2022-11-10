@@ -118,6 +118,13 @@ class UserController extends Controller
         return back()->with('success', '成功标记通知!');
     }
 
+    public function notificationReadAll(Request $request)
+    {
+        $request->user()->unreadNotifications->markAsRead();
+
+        return back()->with('success', '成功标记所有通知为已读!');
+    }
+
     public function show(User $user)
     {
         return view('user.show', [
