@@ -7,7 +7,7 @@
             <form action="{{ route('comments.update', $comment) }}" method="post">
                 @csrf
                 @method('PATCH')
-                <x-form.input type="markdown" name="content" default="{{ $comment->content }}" required/>
+                <x-form.input type="markdown" name="content" :default="$comment->content" required/>
                 <x-form.submit/>
             </form>
         </div>
