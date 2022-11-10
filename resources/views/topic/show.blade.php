@@ -263,6 +263,10 @@
                                 href="{{ route('users.show', $topic->author) }}">
                                 {{ $topic->author->username }}
                             </a>
+                            <span class="mt-1 flex justify-center items-center space-x-1 text-gray-600 text-sm">
+                                <x-heroicon-o-heart class="w-4 h-4"/>
+                                <span>{{ $topic->author->likes()->count() }} likes</span>
+                            </span>
                         </figcaption>
                     </figure>
                 </div>
