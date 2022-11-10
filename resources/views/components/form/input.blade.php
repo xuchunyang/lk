@@ -27,18 +27,18 @@
             name="{{ $name }}"
             rows="3">{{ old($name, $default) }}</textarea>
     @elseif($type === 'markdown')
-        <div class="mt-1.5" x-data="{ preview: false, html: null }">
-            <nav class="flex mb-1">
+        <div class="mt-1.5 border p-2" x-data="{ preview: false, html: null }">
+            <nav class="flex border-b">
                 <button
                     type="button"
-                    class="border px-4 py-1 text-sm"
-                    :class="!preview && 'bg-gray-50'"
+                    class="px-4 py-1 text-sm border-b border-transparent"
+                    :class="!preview && 'border-b-black/50'"
                     @click="preview = false; html = null">Write
                 </button>
                 <button
                     type="button"
-                    class="border px-4 py-1 text-sm"
-                    :class="preview && 'bg-gray-50'"
+                    class="px-4 py-1 text-sm border-b border-transparent"
+                    :class="preview && 'border-b-black/50'"
                     @click="preview = true; html = $refs.content.value ? await renderMarkdown($refs.content.value) : 'Nothing to preview'">
                     Preview
                 </button>
@@ -48,13 +48,13 @@
                     <textarea
                         x-ref="content"
                         {{ $attributes->only('required') }}
-                        class="js-markdown-editor block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        class="js-markdown-editor block w-full border-0 focus:ring-stone-300 sm:text-sm"
                         id="{{ $name }}"
                         name="{{ $name }}"
                         rows="8">{{ old($name, $default) }}</textarea>
-                    <p class="mt-1.5 text-sm text-gray-500">请用 Markdown 格式，拖拽上传图片</p>
+                    <p class="mt-1.5 text-sm text-gray-500">请用 Markdown 格式，可拖拽或粘贴上传图片</p>
                 </div>
-                <div x-show="preview" class="border px-3 py-2 bg-gray-50">
+                <div x-show="preview" class="border px-3 py-2 min-h-[202px]">
                     <div x-show="html === null">Loading...</div>
                     <div x-show="html !== null">
                         <article x-html="html" class="prose"></article>
