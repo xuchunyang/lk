@@ -66,6 +66,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): Response|bool
     {
-        return $this->update($user, $comment);
+        return $user->id === $comment->author_id &&
+            !Comment::where('parent_id', $comment->id)->exists();
     }
 }

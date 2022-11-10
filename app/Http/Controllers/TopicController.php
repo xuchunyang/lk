@@ -64,6 +64,7 @@ class TopicController extends Controller
                 'comments' => [
                     'author',
                     'likes',
+                    'parent.author',
                 ],
             ])->find($topic->id),
         ]);
