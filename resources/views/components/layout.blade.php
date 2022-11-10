@@ -38,7 +38,7 @@
                 <form
                     action="{{ route('home') }}"
                     method="get"
-                    class="flex items-center">
+                    class="hidden sm:flex sm:items-center">
                     <label class="sr-only" for="search">Search</label>
                     <input class="rounded-full text-sm px-4 py-1.5 opacity-80 focus:opacity-100" type="search"
                            id="search" name="search" placeholder="搜索帖子"
