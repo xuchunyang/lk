@@ -82,6 +82,6 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return back()->with('success', '成功删除分类!');
+        return redirect('/')->with('success', '成功删除分类!');
     }
 }

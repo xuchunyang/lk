@@ -36,9 +36,22 @@
                     <div class="border-b border-b-black/10 p-[14px] flex items-center">
                         <img class="w-6 h-6" src="{{ $category->logo }}" alt="{{ $category->name }}'s logo">
                         <h1 class="mx-2 text-sm">{{ $category->title }}</h1>
+                        <span class="ml-auto"></span>
+                        @can('delete', $category)
+                            <form action="{{ route('categories.destroy', $category) }}" method="post"
+                                  class="mr-2">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="block text-gray-500 p-1 hover:bg-gray-100 hover:text-rose-600"
+                                    type="submit">
+                                    <x-heroicon-o-trash class="w-4 h-4"/>
+                                </button>
+                            </form>
+                        @endcan
                         @can('update', $category)
                             <a href="{{ route('categories.edit', $category) }}"
-                               class="ml-auto text-gray-500 p-1 hover:bg-gray-100">
+                               class="text-gray-500 p-1 hover:bg-gray-100">
                                 <x-heroicon-o-wrench class="w-4 h-4"/>
                             </a>
                         @endcan

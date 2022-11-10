@@ -66,6 +66,6 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category): bool
     {
-        return $this->update($user, $category);
+        return $this->update($user, $category) && $category->topics()->count() === 0;
     }
 }
