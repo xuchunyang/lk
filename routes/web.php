@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RenderMarkdown;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UploadImage;
 use App\Http\Controllers\UserController;
+use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,11 +22,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', HomeController::class);
 
-Route::resource('categories', CategoryController::class);
+Route::resource('categories', CategoryController::class)
+    ->except('index');
 
 Route::post('/topics/{topic}/like', [TopicController::class, 'like'])
     ->name('topics.like')
@@ -37,7 +39,7 @@ Route::post('/comments/{comment}/like', [CommentController::class, 'like'])
     ->can('like');
 Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])
     ->name('comments.reply')
-    ->can('create', \App\Models\Comment::class);
+    ->can('create', Comment::class);
 Route::resource('categories.topics.comments', CommentController::class)
     ->shallow()
     ->only('store', 'edit', 'update', 'destroy');
@@ -48,7 +50,7 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate'])->nam
 Route::post('/users/signout', [UserController::class, 'signout'])->name('users.signout')->middleware('auth');
 Route::get('/users/notifications', [UserController::class, 'notifications'])->name('users.notifications')->middleware('auth');
 Route::post('/users/notifications/{databaseNotification}/read', [UserController::class, 'notificationRead'])->name('users.notifications.read')
-    ->can('readNotification', [\App\Models\User::class, 'databaseNotification']);
+    ->can('readNotification', [User::class, 'databaseNotification']);
 Route::post('/users/notifications/read_all', [UserController::class, 'notificationReadAll'])->name('users.notifications.read-all')
     ->middleware('auth');
 Route::resource('users', UserController::class)

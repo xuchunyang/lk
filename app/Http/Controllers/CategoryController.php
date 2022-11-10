@@ -16,13 +16,6 @@ class CategoryController extends Controller
         $this->authorizeResource(Category::class, 'category');
     }
 
-    public function index()
-    {
-        return view('category.index', [
-            'categories' => Category::query()->with('author')->get(),
-        ]);
-    }
-
     public function show(Category $category)
     {
         return view('category.show', [
