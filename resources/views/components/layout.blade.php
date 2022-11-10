@@ -44,7 +44,7 @@
                     @endif
                     <span>{{ Auth::user()->unreadNotifications->count() }}</span>
                 </a>
-                <a href="{{ route('users.edit', Auth::user()) }}"
+                <a href="{{ route('users.show', Auth::user()) }}"
                    class="p-3 flex items-center space-x-2 hover:bg-gray-100">
                     <img class="rounded-full w-6 h-6" src="{{ Auth::user()->avatar }}" alt="avatar">
                     <span>{{ Auth::user()->username }}</span>
