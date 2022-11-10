@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "blade-ui-kit/blade-heroicons": "^2.0",
+        "fakerphp/faker": "^1.20",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
@@ -16,7 +17,6 @@
         "yzalis/identicon": "^2.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
         "itsgoingd/clockwork": "^5.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
