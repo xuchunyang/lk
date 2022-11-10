@@ -54,14 +54,20 @@
                                     {{ $topic->author->username }}
                                 </a>
                             </div>
-                            <p class="text-sm flex items-center space-x-1">
-                                <span>暂无个人描述~</span>
+                            <div class="text-sm flex items-center space-x-1">
+                                @if($topic->author->description)
+                                    <x-markdown-rendered-with-prose
+                                        class="prose-p:m-0"
+                                        markdown="{{ $topic->author->description }}"/>
+                                @else
+                                    <span>暂无个人描述~</span>
+                                @endif
                                 @can('update', $topic->author)
                                     <a href="{{ route('users.edit', $topic->author) }}">
                                         <x-heroicon-o-pencil-square class="w-4 h-4"/>
                                     </a>
                                 @endcan
-                            </p>
+                            </div>
                         </figcaption>
                     </figure>
                 </div>

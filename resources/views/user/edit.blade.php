@@ -16,6 +16,9 @@
                               type="image"
                               default="{{ $user->avatar }}"
                               help="['image', 'max:200', 'dimensions:ratio=1/1']"/>
+                <x-form.input name="description"
+                              type="markdown"
+                              default="{{ $user->description }}"/>
                 <x-form.submit/>
             </form>
         </div>

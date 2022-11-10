@@ -6,6 +6,10 @@
 
             <img src="{{ $user->avatar }}" alt="{{ $user->username }}'s avatar">
 
+            @if($user->description)
+                <x-markdown-rendered-with-prose markdown="{{ $user->description }}"/>
+            @endif
+
             @can('update', $user)
                 <div class="mt-4">
                     <a
