@@ -25,13 +25,13 @@
             <nav class="flex font-medium text-sm text-gray-700">
                 @if($category)
                     <a href="{{ route('categories.show', $category) }}"
-                       class="mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
+                       class="mr-4 p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                         <img class="w-6 h-6 rounded-sm" src="{{ $category->logo }}" alt="logo">
                         <span>{{ $category->name }}</span>
                     </a>
                 @endif
                 <a href="/"
-                   class="mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
+                   class="mr-4 p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                     <x-heroicon-o-home class="w-6 h-6"/>
                     <span>Home</span>
                 </a>
@@ -47,7 +47,7 @@
                 </form>
                 @auth
                     <a href="{{ route('users.notifications') }}"
-                       class="ml-auto mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
+                       class="ml-auto mr-4 p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                         @if(Auth::user()->unreadNotifications->isEmpty())
                             <x-heroicon-o-bell-snooze class="w-6 h-6"/>
                         @else
@@ -57,7 +57,7 @@
                     </a>
                     <div class="relative group">
                         <a href="{{ route('users.show', Auth::user()) }}"
-                           class="p-3 flex items-center space-x-2 hover:bg-gray-100">
+                           class="p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                             <img class="rounded-full w-6 h-6" src="{{ Auth::user()->avatar }}" alt="avatar">
                             <span>{{ Auth::user()->username }}</span>
                             <x-heroicon-s-chevron-down class="w-3 h-3"/>
@@ -75,14 +75,19 @@
                     </div>
                 @else
                     <a href="{{ route('users.signup') }}"
-                       class="ml-auto mr-4 p-3 flex items-center space-x-2 hover:bg-gray-100">
+                       class="ml-auto p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                         <x-heroicon-o-user-plus class="w-6 h-6"/>
                         <span>Sign up</span>
                     </a>
                     <a href="{{ route('users.signin') }}"
-                       class="p-3 flex items-center space-x-2 hover:bg-gray-100">
+                       class="p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
                         <x-heroicon-o-arrow-left-on-rectangle class="w-6 h-6"/>
                         <span>Sign in</span>
+                    </a>
+                    <a href="{{ route('auth.github.redirect') }}"
+                       class="p-1 sm:p-3 flex items-center space-x-2 hover:bg-gray-100">
+                        <x-github-logo class="h-6 w-6"/>
+                        <span>Via GitHub</span>
                     </a>
                 @endauth
             </nav>

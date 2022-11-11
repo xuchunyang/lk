@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GitHubLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RenderMarkdown;
 use App\Http\Controllers\TopicController;
@@ -60,3 +61,6 @@ Route::post('/upload/image', UploadImage::class)
     ->middleware('auth');
 Route::post('/render/markdown', RenderMarkdown::class)
     ->middleware('auth');
+
+Route::get('/auth/github/redirect', [GitHubLoginController::class, 'redirect'])->name('auth.github.redirect');
+Route::get('/auth/github/callback', [GitHubLoginController::class, 'callback'])->name('auth.github.callback');

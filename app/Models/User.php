@@ -28,6 +28,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'description',
+        'github_id',
+        'github_username',
     ];
 
     /**
