@@ -16,11 +16,21 @@ class GitHubLoginController extends Controller
         return Socialite::driver('github')->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
         $githubUser = Socialite::driver('github')->user();
 
         $user = User::where('github_id', $githubUser->getId())->first();
+
+        if (!$user) {
+            $user = $request->user();
+            if ($user) {
+                $user->update([
+                    'github_id' => $githubUser->getId(),
+                    'github_username' => $githubUser->getNickname(),
+                ]);
+            }
+        }
 
         if (!$user) {
             $username = $githubUser->getNickname();

@@ -85,7 +85,7 @@
             type="{{ $type }}">
     @else
         <input
-            {{ $attributes->only('required') }}
+            {{ $attributes->only(['required', 'readonly']) }}
             class="block w-full mt-1.5 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             id="{{ $name }}"
             name="{{ $name }}"
