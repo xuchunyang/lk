@@ -118,11 +118,17 @@
     {{ $slot }}
 </div>
 
-<footer class="flex-shrink-0 mt-10 p-8 bg-stone-900">
-    <p class="text-center text-white/50 text-xs">
-        一个小小的 <a href="https://learnku.com/">
-            LearnKu
-        </a> 克隆
+<footer class="flex-shrink-0 mt-10 p-8 text-gray-400 bg-stone-900 text-center text-sm space-y-2">
+    <p>
+        {{ number_format(microtime(true) - LARAVEL_START, 2) }} seconds
+    </p>
+
+    <p>
+        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+    </p>
+
+    <p>
+        一个小小的 LearnKu 克隆 (<a href="https://github.com/xuchunyang/lk" target="_blank">网站源代码</a>)
     </p>
 </footer>
 
